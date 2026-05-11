@@ -135,14 +135,15 @@ function search() {
 	grep -Ri -e "$1" "$2"
 }
 
-function _set_kitty_tab_title() {
+function _set_terminal_title() {
 	local title="${PWD/#$HOME/~}"
-	if git rev-parse --is-inside-work-tree &>/dev/null; then
-		local branch=$(git branch --show-current 2>/dev/null)
+	local branch
+	if branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null); then
 		local dirty=""
 		[[ -n $(git status --porcelain 2>/dev/null) ]] && dirty="*"
 		title="${title} (${branch}${dirty})"
 	fi
-	kitty @ set-tab-title "$title"
+	[[ -n $CONTAINER_ID ]] && title="[📦 ${CONTAINER_ID}] ${title}"
+	printf '\e]2;%s\a' "$title"
 }
-precmd_functions+=(_set_kitty_tab_title)
+precmd_functions+=(_set_terminal_title)
