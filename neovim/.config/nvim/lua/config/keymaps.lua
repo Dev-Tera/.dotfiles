@@ -29,6 +29,10 @@ end, { desc = "Toggle diff since last save" })
 vim.keymap.set({ "n", "v" }, "j", "gj")
 vim.keymap.set({ "n", "v" }, "k", "gk")
 
+vim.keymap.set("n", "K", function()
+    vim.lsp.buf.hover({ border = "rounded" })
+end, { desc = "LSP hover (mit Border)" })
+
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Window left" })
 vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Window down" })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Window up" })
