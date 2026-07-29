@@ -1,0 +1,9 @@
+# Razer DeathAdder V2 Pro nicht als Wakeup-Quelle zulassen.
+# Verhindert, dass Mausbewegung den Laptop sofort aus s2idle-Suspend weckt.
+#
+# Installation:
+# sudo cp frickelkram/90-razer-nowake.rules /etc/udev/rules.d/
+# sudo udevadm control --reload-rules
+# sudo udevadm trigger --subsystem-match=usb
+
+ACTION=="add|change", SUBSYSTEM=="usb", ATTR{idVendor}=="1532", ATTR{idProduct}=="007d", ATTR{power/wakeup}="disabled"
