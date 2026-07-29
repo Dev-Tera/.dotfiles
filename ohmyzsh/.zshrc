@@ -104,6 +104,8 @@ alias ls='eza --icons=auto'
 eval "$(zoxide init --cmd cd zsh)"
 alias vim='nvim'
 alias vimm='/usr/bin/vim'
+alias c="~/Dokumente/Atlas/06\ -\ Claude\'s\ Corner/ && claude $@"
+alias lg=lazygit
 
 bindkey -s '^v' 'vim-fzf\n'
 function vim-fzf() {
@@ -147,3 +149,20 @@ function _set_terminal_title() {
 	printf '\e]2;%s\a' "$title"
 }
 precmd_functions+=(_set_terminal_title)
+
+if command -v zellij &>/dev/null;then
+    alias z='zellij -s "$@"'
+    alias zls='zellij list-sessions'
+    function za() {
+        if [[ $# -eq 0 ]];then
+            session=$(zellij list-sessions --reverse | fzf --ansi)
+            session=${session%% *}
+        else
+            session=$@
+        fi
+
+        if [[ -n $session ]];then
+            zellij attach $session
+        fi
+    }
+fi
