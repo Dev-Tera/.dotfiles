@@ -14,6 +14,6 @@ return {
 		})
 	end,
 	keys = {
-		{ '<leader>e', '<cmd>NvimTreeToggle<CR>', desc = 'Toggle file tree' }
+		{ '<leader>t', '<cmd>NvimTreeToggle<CR>', desc = 'Toggle file tree' }
 	}
 }
