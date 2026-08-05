@@ -106,6 +106,7 @@ alias vim='nvim'
 alias vimm='/usr/bin/vim'
 alias c="~/Dokumente/Atlas/06\ -\ Claude\'s\ Corner/ && claude $@"
 alias lg=lazygit
+(( $+commands[trash-put] )) && alias rm='trash-put'
 
 bindkey -s '^v' 'vim-fzf\n'
 function vim-fzf() {
