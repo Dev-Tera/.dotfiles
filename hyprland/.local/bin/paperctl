@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Wrapper around Hyprpaper
+
+mode=$1
+if [[ -z $mode ]];then
+    mode=$(echo "Set wallpaper temporary
+Change wallpaper random
+Edit config" | fzf)
+fi
+
+if [[ $mode == "set" || $mode == "Set wallpaper temporary" ]];then
+    wallpaper="$(find ~/.local/share/wallpapers/ -type f | fzf --preview='kitty icat --clear --transfer-mode=memory --stdin=no --place=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0 {}')"
+    hyprctl hyprpaper wallpaper ",$wallpaper,cover"
+
+elif [[ $mode == "random" || $mode = "Change wallpaper random" ]];then
+    wallpaper="$(find ~/.local/share/wallpapers/ -type f | shuf -n 1)"
+    hyprctl hyprpaper wallpaper ",$wallpaper,cover"
+
+elif [[ $mode == "edit" || $mode == "Edit config" ]];then
+    $EDITOR ~/.config/hypr/hyprpaper.conf
+fi
