@@ -99,14 +99,15 @@ alias -g NO='>/dev/null'
 alias -g NE='2>/dev/null'
 alias -g NOE='>/dev/null 2>&1'
 alias -g C='| wl-copy'
-source <(fzf --zsh)
-alias ls='eza --icons=auto'
-eval "$(zoxide init --cmd cd zsh)"
+
 alias vim='nvim'
-alias vimm='/usr/bin/vim'
+alias ls='eza --icons=auto'
 alias c="~/Dokumente/Atlas/06\ -\ Claude\'s\ Corner/ && claude $@"
 alias lg=lazygit
 (( $+commands[trash-put] )) && alias rm='trash-put'
+
+source <(fzf --zsh)
+eval "$(zoxide init --cmd cd zsh)"
 
 bindkey -s '^v' 'vim-fzf\n'
 function vim-fzf() {
@@ -167,3 +168,22 @@ if command -v zellij &>/dev/null;then
         fi
     }
 fi
+
+function go() {
+    url=$(git config --get remote.origin.url)
+
+    if [[ -n $url ]];then
+        if [[ $url == https://* ]];then
+            url=${url/.git/}
+        else
+            url=${url/*@/}
+            url=${url/:/\/}
+            url=${url/.git/}
+            url="https://$url"
+        fi
+
+        xdg-open $url
+    else
+        echo "remote.origin.url is not set"
+    fi
+}
