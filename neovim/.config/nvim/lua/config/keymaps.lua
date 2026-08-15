@@ -28,6 +28,10 @@ end, { desc = "Toggle diff since last save" })
 
 vim.keymap.set({ "n", "v" }, "j", "gj")
 vim.keymap.set({ "n", "v" }, "k", "gk")
+vim.keymap.set({ "n", "v" }, "<Down>", "gj")
+vim.keymap.set({ "n", "v" }, "<Up>", "gk")
+vim.keymap.set("i", "<Down>", "<C-o>gj")
+vim.keymap.set("i", "<Up>", "<C-o>gk")
 
 vim.keymap.set("n", "K", function()
     vim.lsp.buf.hover({ border = "rounded" })
