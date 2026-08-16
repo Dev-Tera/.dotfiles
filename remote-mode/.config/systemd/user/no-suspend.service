@@ -1,0 +1,12 @@
+[Unit]
+Description=Blocks suspend and Lid-Switch
+
+[Service]
+ExecStart=/usr/bin/systemd-inhibit \
+    --what=sleep:handle-lid-switch \
+    --who="no-suspend.service" \
+    --why="Block standby" \
+    --mode=block sleep infinity
+
+[Install]
+WantedBy=multi-user.target
