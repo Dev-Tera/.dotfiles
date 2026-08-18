@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# ---Helpers-------------------------------------- 
+confirm() {
+    local message="$1"
+    local defaultChoice="$2"  # y/n
+    [[ $defaultChoice == "y" ]] && choices="[Y/n]" || choices="[y/N]"
+
+    while true; do
+        read -rp "$message $choices " ans
+        case $ans in
+            y|Y)
+                return 0 ;;
+            n|N)
+                return 1 ;;
+            "")
+                [[ $defaultChoice == "y" ]] && return 0 || return 1 ;;
+        esac
+    done
+}
+
+secure-tailscale() {
+    if ! systemctl is-active tailscaled --quiet;then 
+        echo "Tailscale service is offline"
+        confirm "Start the service?" "y" || return 1
+         sudo systemctl start tailscaled
+    fi
+}
+# ------------------------------------------------ 
+
+
+if [[ $1 == "setop" ]];then
+    secure-tailscale || exit 0
+    echo "Set $USER as tailscale operator"
+    sudo tailscale set --operator $USER
+
+elif [[ $1 == "start" ]];then
+    secure-tailscale || exit 0
+    tailscale up --ssh
+    systemctl --user start no-suspend.service
+
+elif [[ $1 == "stop" ]];then
+    systemctl is-active tailscaled --quiet || { echo "Tailscale service is offline"; exit 0; }
+    tailscale down
+    systemctl --user stop no-suspend.service
+    hyprctl dispatch dpms on >/dev/null
+
+elif [[ $1 == "headless" ]];then
+    $0 start
+    pidof hyprlock >/dev/null || hyprctl dispatch exec hyprlock
+    hyprctl dispatch dpms off
+fi

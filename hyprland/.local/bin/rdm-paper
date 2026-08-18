@@ -1,5 +1,0 @@
-#!/bin/bash
-# Sets a random wallpaper
-
-wallpaper="$(find ~/.local/share/wallpapers/ -type f | shuf -n 1)"
-hyprctl hyprpaper wallpaper ",$wallpaper,cover"

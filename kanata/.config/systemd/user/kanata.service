@@ -1,0 +1,9 @@
+[Unit]
+Description=Kanata
+
+[Service]
+ExecStart=/usr/bin/kanata -c %h/.config/kanata/config.kbd
+Restart=no
+
+[Install]
+WantedBy=default.target

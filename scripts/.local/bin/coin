@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Simple script to flip a coin, roll a dice or decide something random
+
+if [ $# -eq 0 ];then
+    printf '%s\n' Kopf Zahl | shuf -n 1
+
+elif [[ $1 = "dice" || $1 == "d" ]];then
+    shuf -i 1-6 -n 1
+
+else
+    printf '%s\n' "$@" | shuf -n 1
+fi
