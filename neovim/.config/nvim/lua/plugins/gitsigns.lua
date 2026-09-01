@@ -51,5 +51,13 @@ return {
             col = 1
           },
         }
+
+        vim.keymap.set("n", "<Leader>gd", function()
+            if vim.wo.diff then
+                vim.cmd("diffoff | wincmd p | bd")
+            else
+                vim.cmd("Gitsigns diffthis HEAD")
+            end
+        end, { desc = "Toggle diff gegen HEAD (Gitsigns)" })
     end,
 }
