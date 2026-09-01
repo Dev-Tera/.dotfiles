@@ -1,45 +1,54 @@
+-- Usage:
+-- Completion (Language Server): MasonInstall
+-- Syntax Highlighting: TSInstall
 return {
     'saghen/blink.cmp',
     dependencies = {
         "neovim/nvim-lspconfig",
         { "mason-org/mason.nvim", opts = {} },
-        { "mason-org/mason-lspconfig.nvim", opts = {} },
+        {
+            "mason-org/mason-lspconfig.nvim",
+            opts = { automatic_enable = { exclude = { "ts_ls" } } },
+        },
     },
+
     version = '1.*',
     opts = {
-    -- C-y: to accept
-    -- C-space: Open menu or open docs if already open
-    -- C-n/C-p or Up/Down: Select next/previous item
-    -- C-e: Hide menu
-    -- C-k: Toggle signature help (if signature.enabled = true)
-    keymap = { preset = 'super-tab' },
-
-    appearance = {
-      nerd_font_variant = 'mono'
+        keymap = { preset = 'super-tab' },
+        appearance = { nerd_font_variant = 'mono' },
+        completion = { documentation = { auto_show = false } },
+        sources = { default = { 'lsp', 'path', 'snippets', 'buffer' } },
+        fuzzy = { implementation = "prefer_rust_with_warning" },
+        signature = { enabled = true },
     },
+    opts_extend = { "sources.default" },
 
-    completion = { documentation = { auto_show = false } },
+    config = function(_, opts)
+        require("blink.cmp").setup(opts)
 
-    sources = {
-      default = { 'lsp', 'path', 'snippets', 'buffer' },
-    },
+        vim.diagnostic.config({
+            virtual_text = { current_line = true },
+            signs = true,
+            underline = true,
+            update_in_insert = false,
+            severity_sort = true,
+            float = {
+                border = "rounded",
+                source = "if_many",
+                header = "",
+                max_width = 80,
+            }, 
+        })
 
-    fuzzy = { implementation = "prefer_rust_with_warning" },
+        vim.api.nvim_create_autocmd("LspAttach", {
+            callback = function(args)
+                vim.keymap.set("n", "gd", vim.lsp.buf.definition,
+                    { buffer = args.buf, desc = "LSP goto definition" })
+                vim.keymap.set("n", "grr", require("telescope.builtin").lsp_references,
+                    { buffer = args.buf, desc = "LSP references (Telescope)" })
+            end,
+        })
 
-    signature = {
-        enabled = true,
-    },
-  },
-  opts_extend = { "sources.default" },
-  config = function (_, opts)
-    require("blink.cmp").setup(opts)
-
-    vim.diagnostic.config({
-        virtual_lines = { current_line = true },  -- nur für die Cursor-Zeile
-        signs = true,
-        underline = true,
-        update_in_insert = false,   -- nicht während des Tippens neu rechnen
-        severity_sort = true,
-    })
-  end
+        vim.lsp.enable("tsc")
+    end,
 }
