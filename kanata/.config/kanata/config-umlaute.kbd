@@ -34,6 +34,12 @@
   hrmL (tap-hold $tt $ht l $hrmThird)
 
   ext (layer-while-held Extend)
+
+  ralt (layer-while-held Umlaute)
+  ae (fork (unicode ä) (unicode Ä) (lsft rsft))
+  oe (fork (unicode ö) (unicode Ö) (lsft rsft))
+  ue (fork (unicode ü) (unicode Ü) (lsft rsft))  
+  ss (unicode ß)
 )
 
 (defsrc
@@ -49,13 +55,21 @@
   tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
   esc  a @hrmS @hrmD @hrmF g    h @hrmJ @hrmK @hrmL ;    '   ret
   lsft z    x    c    v    b    n    m    ,    .    /    rsft
-  lctl lmet @ext   spc            ralt menu rctl
+  lctl lmet @ext         spc            @ralt menu rctl
 )
 
 (deflayer Extend
   grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
   tab  q    w    e    r    t    y    -    =    o    p    [    ]    \
-  esc  a @hrmS @hrmD @hrmF g   lft  down  up right  ;    '    ret
+  esc a @hrmS @hrmD @hrmF g    lft down  up right  ;    '    ret
   lsft z    x    c    v    b    n    [    ]    .    /    rsft
   lctl lmet @ext           spc            ralt menu rctl
+)
+
+(deflayer Umlaute
+  grv  1    2    3    4    5    6    7    8    9    0    -    =    bspc
+  tab  q    w    e    r    t    y   @ue   i   @oe    p    [    ]    \
+  esc @ae  @ss   d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lmet lalt           spc            ralt menu rctl
 )
